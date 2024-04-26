@@ -1,4 +1,4 @@
-name: "spleen_seg"
+name: "spleen-seg"
 backend: "onnxruntime"
 platform: "onnxruntime_onnx"
 default_model_filename: "spleen_seg_model.onnx"
