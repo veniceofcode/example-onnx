@@ -1,0 +1,22 @@
+FROM nvcr.io/nvidia/tritonserver:23.04-py3
+
+ARG MODEL_NAME
+ARG MODEL_DIR="."
+ARG GRPC_PORT=8001
+ARG REST_PORT=8000
+ARG METRICS_PORT=8002
+
+ENV MODEL_NAME_ENV=$MODEL_NAME
+ENV GRPC_PORT_ENV=$GRPC_PORT
+ENV REST_PORT_ENV=$REST_PORT
+ENV METRICS_PORT_ENV=$METRICS_PORT
+
+USER root
+
+COPY --chown=triton-server:triton-server $MODEL_DIR /models
+
+EXPOSE $REST_PORT $GRPC_PORT
+
+USER triton-server
+
+ENTRYPOINT tritonserver --model-repository=/models --allow-metrics true --allow-gpu-metrics true --allow-cpu-metrics true --metrics-port $METRICS_PORT_ENV --grpc-port $GRPC_PORT_ENV --http-port $REST_PORT_ENV
