@@ -26,6 +26,8 @@ spec:
     value: "main"
   - name: containerfileRelativePath
     value: pipelines/containerfiles/Containerfile.openvino.mlserver.mlflow
+  - name: modelRelativePath
+    value: ""
 
   - name: candidate-image-tag-reference
     value: image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.model-name):$(params.model-version)-openvino-candidate
