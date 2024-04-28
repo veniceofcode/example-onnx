@@ -1,0 +1,63 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  labels:
+    tekton.dev/pipeline: aiedge-e2e
+    model-name: spleen-seg
+  generateName: aiedge-e2e-spleen-seg-openvino-
+spec:
+  params:
+  - name: model-name
+    # because of structure of s3 bucket & rigidity of pipeline/containerfile
+    value: v6
+  - name: model-version
+    value: "1"
+
+    # Model comes from Minio
+  - name: fetch-model
+    value: "s3"
+  - name: s3-bucket-name
+    value: spleen
+
+    # Containerfile comes from ODH ai-edge repo
+  - name: git-containerfile-repo
+    value: https://github.com/opendatahub-io/ai-edge.git
+  - name: git-containerfile-revision
+    value: "main"
+  - name: containerfileRelativePath
+    value: pipelines/containerfiles/Containerfile.openvino.mlserver.mlflow
+
+  - name: candidate-image-tag-reference
+    value: image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.model-name):$(params.model-version)-openvino-candidate
+  - name: target-image-tag-references
+    value:
+    - quay.io/grdryn/spleen-seg:$(params.model-version)-openvino-$(context.pipelineRun.uid)
+    - quay.io/grdryn/spleen-seg:$(params.model-version)-openvino
+    - quay.io/grdryn/spleen-seg:latest-openvino
+
+
+  - name: test-endpoint
+    value: v2/models/$(params.model-name)/versions/$(params.model-version)/infer
+  - name: upon-end
+    value: "delete"
+  pipelineRef:
+    name: aiedge-e2e
+  serviceAccountName: pipeline
+  timeout: 1h0m0s
+  workspaces:
+  - name: build-workspace-pv
+    # Have the tekton controller allocate a PVC for each pipeline run that persists for the life of each PipelineRun object.
+    # NOTE: This PVC will be deleted by the Tekton controller when the PipelineRun is deleted
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  - name: s3-secret
+    secret:
+        secretName: credentials-s3
+  - persistentVolumeClaim:
+      claimName: spleen-seg-test-data
+    name: test-data
