@@ -1,0 +1,61 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  labels:
+    tekton.dev/pipeline: aiedge-e2e
+    model-name: spleen-seg
+  generateName: aiedge-e2e-spleen-seg-triton-
+spec:
+  params:
+  - name: model-name
+    value: spleen-seg
+  - name: model-version
+    value: "6"
+  - name: s3-bucket-name
+    value: spleen
+  - name: git-containerfile-repo
+    value: https://github.com/grdryn/example-onnx.git
+  - name: git-containerfile-revision
+    value: "main"
+  - name: containerfileRelativePath
+    value: containerfiles/triton/Containerfile
+  - name: fetch-model
+    value: "git"
+  - name: git-model-repo
+    value: https://github.com/grdryn/example-onnx.git
+  - name: modelRelativePath
+    value: "models"
+  - name: git-model-revision
+    value: "main"
+  - name: test-endpoint
+    value: v2/models/$(params.model-name)/versions/$(params.model-version)/infer
+  - name: candidate-image-tag-reference
+    value: image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.model-name):$(params.model-version)-triton-candidate
+  - name: target-image-tag-references
+    value:
+    - quay.io/grdryn/spleen-seg:$(params.model-version)-triton-$(context.pipelineRun.uid)
+    - quay.io/grdryn/spleen-seg:$(params.model-version)-triton
+    - quay.io/grdryn/spleen-seg:latest-triton
+  - name: upon-end
+    value: "delete"
+  pipelineRef:
+    name: aiedge-e2e
+  serviceAccountName: pipeline
+  timeout: 1h0m0s
+  workspaces:
+  - name: build-workspace-pv
+    # Have the tekton controller allocate a PVC for each pipeline run that persists for the life of each PipelineRun object.
+    # NOTE: This PVC will be deleted by the Tekton controller when the PipelineRun is deleted
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  - name: s3-secret
+    secret:
+        secretName: credentials-s3
+  - persistentVolumeClaim:
+      claimName: spleen-seg-test-data
+    name: test-data
