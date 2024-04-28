@@ -11,14 +11,8 @@ spec:
     value: spleen-seg
   - name: model-version
     value: "6"
-  - name: s3-bucket-name
-    value: spleen
-  - name: git-containerfile-repo
-    value: https://github.com/grdryn/example-onnx.git
-  - name: git-containerfile-revision
-    value: "main"
-  - name: containerfileRelativePath
-    value: containerfiles/triton/Containerfile
+
+    # Model comes from git repository
   - name: fetch-model
     value: "git"
   - name: git-model-repo
@@ -27,8 +21,15 @@ spec:
     value: "models"
   - name: git-model-revision
     value: "main"
-  - name: test-endpoint
-    value: v2/models/$(params.model-name)/versions/$(params.model-version)/infer
+
+    # Containerfile also comes from git, could be a different repository
+  - name: git-containerfile-repo
+    value: https://github.com/grdryn/example-onnx.git
+  - name: git-containerfile-revision
+    value: "main"
+  - name: containerfileRelativePath
+    value: containerfiles/triton/Containerfile
+
   - name: candidate-image-tag-reference
     value: image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.model-name):$(params.model-version)-triton-candidate
   - name: target-image-tag-references
@@ -36,6 +37,9 @@ spec:
     - quay.io/grdryn/spleen-seg:$(params.model-version)-triton-$(context.pipelineRun.uid)
     - quay.io/grdryn/spleen-seg:$(params.model-version)-triton
     - quay.io/grdryn/spleen-seg:latest-triton
+
+  - name: test-endpoint
+    value: v2/models/$(params.model-name)/versions/$(params.model-version)/infer
   - name: upon-end
     value: "delete"
   pipelineRef:
