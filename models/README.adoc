@@ -1,0 +1,9 @@
+= Models
+
+This directory contains the spleen-seg model, in a directory structure
+expected by Triton, and in a way that it can be consumed by the ODH
+aiedge-e2e pipeline.
+
+There's also a config.pbtxt file included in the spleen-seg/
+directory, which will be read by tritonserver at startup, to be able
+to load the model as expected.
