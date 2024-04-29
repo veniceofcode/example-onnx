@@ -1,0 +1,31 @@
+= aiedge-e2e Tekton Pipeline
+
+This pipeline is a copy of the one from
+https://github.com/opendatahub-io/ai-edge/tree/3d655f307b4a4648db7b7df56be74a43220d4fdb/pipelines/tekton/aiedge-e2e[opendatahub-io/ai-edge],
+with minor fixes that have not yet been merged upstream.
+
+To apply this to a cluster, run the following:
+
+[source,sh]
+----
+oc apply -k .
+----
+
+Example PipelineRun files for this can be found in the
+link:../examples/[examples directory] (see the
+link:../examples/README.adoc[README] in that directory for
+pre-requisites for those examples):
+
+*
+  link:../examples/spleen-seg-triton.pipelinerun.yaml[spleen-seg-triton.pipelinerun.yaml]
+  shows an example that consumes the model from this Git repository
+  directly, and builds it into an image to be run with the Triton
+  model server. The Containerfile for this example also is also
+  sourced from this repository.
+
+*
+  link:../examples/spleen-seg-openvino-s3.pipelinerun.yaml[spleen-seg-openvino-s3.pipelinerun.yaml]
+  shows an example that consumes the model from an S3/Minio bucket,
+  and builds it into an image to be run with the OpenVINO model
+  server. The Containerfile for this example is sourced from the
+  opendatahub-io/ai-edge repository.
