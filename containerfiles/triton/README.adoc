@@ -1,6 +1,7 @@
 = Triton Containerfile
 
+:link-aiedge-e2e: link:../../pipelines/aiedge-e2e[the pipelines/ directory in this repo]
+
 This Containerfile isn't currently expected to be executed standalone
 using Podman, it works best with the ODH ai-edge build pipeline, which
-has been copied into link:../../pipelines/aiedge-e2e[the pipelines/
-directory in this repo].
+has been copied into {link-aiedge-e2e}.

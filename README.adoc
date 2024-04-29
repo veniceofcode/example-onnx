@@ -1,32 +1,34 @@
 = ODH ai-edge example MLOps project
 
+:link-odh-ai-edge: https://github.com/opendatahub-io/ai-edge[ODH ai-edge]
+:link-odh-ai-edge-credential-docs: https://github.com/opendatahub-io/ai-edge/tree/main/pipelines#setup-credentials[the ODH ai-edge docs on setting up credentials]
+:link-chbox: https://github.com/veniceofcode/chbox[veniceofcode/chbox]
+
+:link-aiedge-e2e-README: link:./pipelines/aiedge-e2e/README.adoc[the aiedge-e2e README]
+:link-populate-test-data-README: link:./pipelines/examples/populate-test-data/README.adoc[the populate-test-data README]
+:link-pipeline-examples-README: link:./pipelines/examples/README.adoc[the examples README]
+
 This project contains some stuff to build the ChRIS spleen-seg model
-into a runnable image, using the
-https://github.com/opendatahub-io/ai-edge[ODH ai-edge MLOps build
-Pipeline]. It is intended to build an image that can be used with
-https://github.com/veniceofcode/chbox[veniceofcode/chbox].
+into a runnable image, using the {link-odh-ai-edge} MLOps build
+Pipeline. It is intended to build an image that can be used with
+{link-chbox}.
 
 == How to run this example
 
-* Provision aiedge-e2e Tekton Pipeline.
-  See link:./pipelines/aiedge-e2e/README.adoc[the corresponding README].
+* Provision aiedge-e2e Tekton Pipeline.  See {link-aiedge-e2e-README}.
 * Create and populate the test data PVC. See
-  link:./pipelines/examples/populate-test-data/README.adoc[the
-  populate-test-data README] for more information.
+   {link-populate-test-data-README} for more information.
 * Create an image registry secret containing a credential that can be
   used to push the resulting image to the target image repo, and link
   it to the pipeline ServiceAccount. See
-  https://github.com/opendatahub-io/ai-edge/tree/main/pipelines#setup-credentials[the
-  ODH ai-edge docs] for more information on this.
+  {link-odh-ai-edge-credential-docs} for more information on this.
 * [Optional] If your model is stored in S3-compatible object storage,
   create a secret with a credential that can be used to download that,
   and link it to the pipeline ServiceAccount. See
-  https://github.com/opendatahub-io/ai-edge/tree/main/pipelines#setup-credentials[the
-  ODH ai-edge docs] for more information on this.
+  {link-odh-ai-edge-credential-docs} for more information on this.
 * Choose the example PipelineRun that you wish to provision, and use
-  `oc create` to run that. See
-  link:./pipelines/examples/README.adoc[the examples README] for more
-  information on the examples.
+  `oc create` to run that. See {link-pipeline-examples-README} for
+  more information on the examples.
 ** Update the `target-image-tag-references` to point to an image
    registry repo that you want the pipeline to push to (and which the
    previously created credential has access to push to).

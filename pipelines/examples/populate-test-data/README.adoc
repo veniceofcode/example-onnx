@@ -11,22 +11,22 @@ PersistentVolumeClaim for use as a workspace in the Pipeline.
 
 == Create PVC and a pod to be used with `oc cp`
 
-[source,shell]
+[source,console]
 ----
-oc apply -f resources.yaml
+$ oc apply -f resources.yaml
 ----
 
 == Copy files into PV through pod
 
-[source,shell]
+[source,console]
 ----
-oc cp data.json ephemeral-test-data-populator:/mnt/spleen-seg-test-data/data.json
-oc cp output.json ephemeral-test-data-populator:/mnt/spleen-seg-test-data/output.json
+$ oc cp data.json ephemeral-test-data-populator:/mnt/spleen-seg-test-data/data.json
+$ oc cp output.json ephemeral-test-data-populator:/mnt/spleen-seg-test-data/output.json
 ----
 
 == Delete pod once files are copied
 
-[source,shell]
+[source,console]
 ----
-oc delete pod ephemeral-test-data-populator
+$ oc delete pod ephemeral-test-data-populator
 ----

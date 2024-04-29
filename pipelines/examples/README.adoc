@@ -1,49 +1,46 @@
 = Example PipelineRuns
 
+:link-odh-ai-edge-credential-docs: https://github.com/opendatahub-io/ai-edge/tree/main/pipelines#setup-credentials[the ODH ai-edge docs on setting up credentials]
+
+:link-populate-test-data-README: link:./populate-test-data/README.adoc[the populate-test-data README]
+:link-pipelinerun-openvino-s3: link:spleen-seg-openvino-s3.pipelinerun.yaml[spleen-seg-openvino-s3.pipelinerun.yaml]
+:link-pipelinerun-triton-git: link:spleen-seg-triton.pipelinerun.yaml[spleen-seg-triton.pipelinerun.yaml]
 == Prerequisites
 
 * All of these examples push images to quay.io, so a Secret containing
   a credential that can write to those repositories is needed. See the
-  https://github.com/opendatahub-io/ai-edge/tree/main/pipelines#setup-credentials[instructions
-  in the upstream repo] for more details.
+  {link-odh-ai-edge-credential-docs} for more details.
 
-* For the
-  link:spleen-seg-openvino-s3.pipelinerun.yaml[spleen-seg-openvino-s3.pipelinerun.yaml]
-  example, a credential is needed to be able to fetch the model from
-  S3-compatible object storage. See the
-  https://github.com/opendatahub-io/ai-edge/tree/main/pipelines#setup-credentials[instructions
-  in the upstream repo] for more details.
-
+* For the {link-pipelinerun-openvino-s3} example, a credential is
+  needed to be able to fetch the model from S3-compatible object
+  storage. See the {link-odh-ai-edge-credential-docs} for more
+  details.
 * A PersistentVolumeClaim needs to exist, and be bound to a
   PersistentVolume that contains an example inference request and
   response, which can be used for the test stage of the pipeline.  See
-  link:./populate-test-data/README[the populate-test-data README] for
-  the steps to do this.
+  {link-populate-test-data-README} for the steps to do this.
 
 == Examples
 
 === OpenVINO-based image, model from S3
 
-The
-link:spleen-seg-openvino-s3.pipelinerun.yaml[spleen-seg-openvino-s3.pipelinerun.yaml]
-example fetches the model from S3-compatible object storage, and
-packages it into an image along with the OpenVINO model server.
+The {link-pipelinerun-openvino-s3} example fetches the model from
+S3-compatible object storage, and packages it into an image along with
+the OpenVINO model server.
 
 === Triton-based image, model from Git
 
-The
-link:spleen-seg-triton.pipelinerun.yaml[spleen-seg-triton.pipelinerun.yaml]
-example fetches the model from this Git repository as part of the
-pipeline, and packages it into an image along with the Triton model
-server.
+The {link-pipelinerun-triton-git} example fetches the model from this
+Git repository as part of the pipeline, and packages it into an image
+along with the Triton model server.
 
 === Create a PipelineRun from one of these examples
 
 These examples are expected to be declared using:
 
-[source,sh]
+[source,console]
 ----
-oc create -f <PipelineRun file>
+$ oc create -f <PipelineRun file>
 ----
 
 They're not expected to work with `oc apply`, because of the
