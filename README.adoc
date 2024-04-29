@@ -1,0 +1,7 @@
+= ODH ai-edge example MLOps project
+
+This project contains some stuff to build the ChRIS spleen-seg model
+into a runnable image, using the
+https://github.com/opendatahub-io/ai-edge[ODH ai-edge MLOps build
+Pipeline]. It is intended to build an image that can be used with
+https://github.com/veniceofcode/chbox[veniceofcode/chbox].
