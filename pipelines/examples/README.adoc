@@ -1,0 +1,44 @@
+= Example PipelineRuns
+
+== Prerequisites
+
+* All of these examples push images to quay.io, so a Secret containing
+  a credential that can write to those repositories is needed. See the
+  https://github.com/opendatahub-io/ai-edge/tree/main/pipelines#setup-credentials[instructions
+  in the upstream repo] for more details.
+
+* For the
+  link:spleen-seg-openvino-s3.pipelinerun.yaml[spleen-seg-openvino-s3.pipelinerun.yaml]
+  example, a credential is needed to be able to fetch the model from
+  S3-compatible object storage. See the
+  https://github.com/opendatahub-io/ai-edge/tree/main/pipelines#setup-credentials[instructions
+  in the upstream repo] for more details.
+
+== Examples
+
+=== OpenVINO-based image, model from S3
+
+The
+link:spleen-seg-openvino-s3.pipelinerun.yaml[spleen-seg-openvino-s3.pipelinerun.yaml]
+example fetches the model from S3-compatible object storage, and
+packages it into an image along with the OpenVINO model server.
+
+=== Triton-based image, model from Git
+
+The
+link:spleen-seg-triton.pipelinerun.yaml[spleen-seg-triton.pipelinerun.yaml]
+example fetches the model from this Git repository as part of the
+pipeline, and packages it into an image along with the Triton model
+server.
+
+=== Create a PipelineRun from one of these examples
+
+These examples are expected to be declared using:
+
+[source,sh]
+----
+oc create -f <PipelineRun file>
+----
+
+They're not expected to work with `oc apply`, because of the
+`generateName` metadata field that generates the name.
