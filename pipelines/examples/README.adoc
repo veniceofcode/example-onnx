@@ -14,6 +14,12 @@
   https://github.com/opendatahub-io/ai-edge/tree/main/pipelines#setup-credentials[instructions
   in the upstream repo] for more details.
 
+* A PersistentVolumeClaim needs to exist, and be bound to a
+  PersistentVolume that contains an example inference request and
+  response, which can be used for the test stage of the pipeline.  See
+  link:./populate-test-data/README[the populate-test-data README] for
+  the steps to do this.
+
 == Examples
 
 === OpenVINO-based image, model from S3

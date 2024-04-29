@@ -1,0 +1,32 @@
+== Populate PVC with test data
+
+To be able to run pipeline successfully, test data needs to be
+provided, in the form of a `data.json` file with an input inference
+request payload, and `output.json` containing an example successful
+response.
+
+Since the files for the spleen-seg model are too large to put into a
+ConfigMap, we'll put them into a PersistentVolume, and then retain the
+PersistentVolumeClaim for use as a workspace in the Pipeline.
+
+== Create PVC and a pod to be used with `oc cp`
+
+[source,shell]
+----
+oc apply -f resources.yaml
+----
+
+== Copy files into PV through pod
+
+[source,shell]
+----
+oc cp data.json ephemeral-test-data-populator:/mnt/spleen-seg-test-data/data.json
+oc cp output.json ephemeral-test-data-populator:/mnt/spleen-seg-test-data/output.json
+----
+
+== Delete pod once files are copied
+
+[source,shell]
+----
+oc delete pod ephemeral-test-data-populator
+----
