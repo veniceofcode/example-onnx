@@ -34,9 +34,9 @@ spec:
     value: image-registry.openshift-image-registry.svc:5000/$(context.pipelineRun.namespace)/$(params.model-name):$(params.model-version)-triton-candidate
   - name: target-image-tag-references
     value:
-    - quay.io/grdryn/spleen-seg:$(params.model-version)-triton-$(context.pipelineRun.uid)
-    - quay.io/grdryn/spleen-seg:$(params.model-version)-triton
-    - quay.io/grdryn/spleen-seg:latest-triton
+    - quay.io/rbrhssa/spleen-seg:$(params.model-version)-triton-$(context.pipelineRun.uid)
+    - quay.io/rbrhssa/spleen-seg:$(params.model-version)-triton
+    - quay.io/rbrhssa/spleen-seg:latest-triton
 
   - name: test-endpoint
     value: v2/models/$(params.model-name)/versions/$(params.model-version)/infer
